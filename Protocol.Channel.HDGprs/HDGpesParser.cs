@@ -17,7 +17,7 @@ namespace Protocol.Channel.HDGprs
 {
     public class HDGpesParser : IHDGprs
     {
-        public static int MAX_BUFFER = 1024;
+        public static int MAX_BUFFER = 4096;
         internal class MyMessage
         {
             public string ID;
@@ -450,15 +450,7 @@ namespace Protocol.Channel.HDGprs
                         string result = null;
                         if (data.Contains("$"))
                         {
-                            result = data.Substring(data.IndexOf("$"));
-                            int lgth = int.Parse(result.Substring(11, 4));
-                            //获取报文长度
-                            if (lgth > MAX_BUFFER)
-                            {
-                                continue;
-                            }
-
-                            result = result.Substring(0, lgth);
+                            result = data.Substring(data.IndexOf("$"), data.IndexOf("\0"));
 
                             if (!(result.StartsWith("$") && result.EndsWith("\r\n")))
                             {
