@@ -488,8 +488,8 @@ namespace Protocol.Channel.HDGprs
                                 }
                                 InvokeMessage(temp, "原始数据");
                                 //2.2 获取封装的头部信息
-                                string head = temp.Substring(0, 57);
-                                int length = int.Parse(temp.Substring(53, 4));
+                                string head = data.Substring(0, 57);
+                                int length = int.Parse(data.Substring(53, 4));
 
                                 //2.3 根据头部信息获取数据类型  HADCP OR VADCP
                                 string type = "";
@@ -507,6 +507,7 @@ namespace Protocol.Channel.HDGprs
                                 if (type == "H")
                                 {
                                     hdt0 = temp.Substring(57, length * 2);
+                                    //hdt0 = temp.Substring(57);
                                     //写入DT0文件
                                     Write2File writeClass = new Write2File("hdt0");
                                     Thread t = new Thread(new ParameterizedThreadStart(writeClass.WriteInfoToFile));
@@ -523,6 +524,7 @@ namespace Protocol.Channel.HDGprs
                                     Thread t = new Thread(new ParameterizedThreadStart(writeClass.WriteInfoToFile));
                                     t.Start(vdt0 + "\r\n");
                                 }
+                                return;
                             }
                             //批量传输解析
                             if (data.Contains("1K"))
